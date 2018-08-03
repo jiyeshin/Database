@@ -2,6 +2,7 @@ package contact;
 
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 
 public class ContactMain {
 
@@ -10,7 +11,8 @@ public class ContactMain {
 		//상위 인터페이스나 클래스 이름으로 변수를 만들고
 		//하위 클래스의 인스턴스를 생성해서 대입
 		ContactDao dao=new ContactDaoImpl();
-		ContactTable contact=new ContactTable();
+		
+		/*ContactTable contact=new ContactTable();
 		contact.setNum(1);
 		contact.setName("아메리");
 		contact.setPhone("010-9876-5432");
@@ -27,11 +29,14 @@ public class ContactMain {
 			System.out.println("성공");
 		}else {
 			System.out.println("실패");
-		}
+		}*/
 
+	/*	List<ContactTable> list = dao.nameContactTable("아");
+		for(ContactTable contact:list) {
+			System.out.println(contact);
+		}*/
 		
-		
-	
+		new ContactView();
 		
 		
 

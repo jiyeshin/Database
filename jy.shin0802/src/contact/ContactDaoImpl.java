@@ -1,6 +1,7 @@
 package contact;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactDaoImpl implements ContactDao {
@@ -136,14 +137,64 @@ public class ContactDaoImpl implements ContactDao {
 
 	@Override
 	public List<ContactTable> allContactTable() {
-		// TODO Auto-generated method stub
-		return null;
+		List<ContactTable> list = new ArrayList<ContactTable>();
+		connect();
+		try {
+			//sql 실행 객체
+			pstmt=con.prepareStatement
+					("select num, phone, name, email, bday from contacttable");
+			rs=pstmt.executeQuery();
+			
+			//반복문을 이용해서 읽은 데이터를 List에 저장
+			while(rs.next()) {
+				//하나의 행을 읽어서 DTO에 저장
+				ContactTable ct=new ContactTable();
+				ct.setNum(rs.getInt(1)); //ct.setNum(rs.getInt("num"));
+				ct.setName(rs.getString("name"));
+				ct.setPhone(rs.getString("phone"));
+				ct.setEmail(rs.getString("email"));
+				ct.setBday(rs.getDate("bday"));
+				
+				list.add(ct); //읽은 데이터를 리스트에 저장
+			}	
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		close();
+		return list;
 	}
 
 	@Override
 	public List<ContactTable> nameContactTable(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		List<ContactTable> list = new ArrayList<ContactTable>();
+		connect();
+		try {
+			//sql 실행 객체
+			pstmt=con.prepareStatement
+					("select num, phone, name, email, bday from contacttable where upper(name) like ?"); 
+			//영문 검색은 반드시 대소문자를 생각해야 함!!!!
+			pstmt.setString(1, "%"+name+"%"); //물음표에 데이터 바인딩
+			rs=pstmt.executeQuery(); //sql 실행
+			
+			//반복문을 이용해서 읽은 데이터를 List에 저장
+			while(rs.next()) {
+				//하나의 행을 읽어서 DTO에 저장
+				ContactTable ct=new ContactTable();
+				ct.setNum(rs.getInt(1)); //ct.setNum(rs.getInt("num"));
+				ct.setName(rs.getString("name"));
+				ct.setPhone(rs.getString("phone"));
+				ct.setEmail(rs.getString("email"));
+				ct.setBday(rs.getDate("bday"));
+				
+				list.add(ct); //읽은 데이터를 리스트에 저장
+			}	
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		close();
+		return list;
 
+	}
 }
